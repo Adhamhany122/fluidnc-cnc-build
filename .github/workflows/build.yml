@@ -24,14 +24,12 @@ jobs:
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
 
-      - name: Run PlatformIO Build
+      - name: Run PlatformIO Build for ESP32-S3
         run: |
           TARGET_DIR=$(find extracted_project -name "platformio.ini" -exec dirname {} \;)
           cd "$TARGET_DIR"
-          echo "=== عرض البيئات المتاحة في مشروعك ==="
-          pio project config
-          echo "=== بدء التجميع الشامل ==="
-          pio run
+          echo "=== بدء تجميع بيئة ESP32-S3 فقط ==="
+          pio run -e esp32s3
 
       - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
