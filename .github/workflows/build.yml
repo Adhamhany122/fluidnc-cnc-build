@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Unzip and Check Files
+      - name: Install Unzip
         run: |
           sudo apt-get update && sudo apt-get install -y unzip
 
@@ -34,11 +34,14 @@ jobs:
           cd "$TARGET_DIR"
           echo "=== بدء تجميع بيئة wifi_s3 ==="
           pio run -e wifi_s3
-    
+          
+          # نسخ ملفات الـ bin الناتجة لمجلد فرعي واضح وقراءته بسهولة
+          mkdir -p $GITHUB_WORKSPACE/output_binaries
+          cp .pio/build/wifi_s3/*.bin $GITHUB_WORKSPACE/output_binaries/
+
       - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
         with:
           name: firmware-binaries
-          path: |
-            **/*.bin
-            
+          path: output_binaries/*.bin
+          
