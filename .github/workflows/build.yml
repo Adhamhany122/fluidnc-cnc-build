@@ -28,8 +28,10 @@ jobs:
         run: |
           TARGET_DIR=$(find extracted_project -name "platformio.ini" -exec dirname {} \;)
           cd "$TARGET_DIR"
-          # تجميع البيئة المخصصة لـ wifi / esp32s3 مباشرة
-          pio run -e wifi --silent || pio run --silent
+          echo "=== عرض البيئات المتاحة في مشروعك ==="
+          pio project config
+          echo "=== بدء التجميع الشامل ==="
+          pio run
 
       - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
