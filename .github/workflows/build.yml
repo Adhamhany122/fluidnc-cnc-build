@@ -1,0 +1,38 @@
+name: Build Custom FluidNC Firmware
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Unzip project files
+        run: |
+          unzip FluidNC-4.1.0-ESP32S3-Custom.zip -d extracted_project
+          ls -la extracted_project
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+
+      - name: Run PlatformIO Build
+        run: |
+          cd extracted_project/*
+          pio run
+
+      - name: Upload Firmware Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware-binaries
+          path: 'extracted_project/**/.pio/build/**/*.bin'
+          
