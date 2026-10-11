@@ -15,8 +15,6 @@ jobs:
       - name: Unzip project files
         run: |
           unzip FluidNC-4.1.0-ESP32S3-Custom.zip -d extracted_project
-          echo "=== Folder Structure ==="
-          ls -la extracted_project
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,9 +27,9 @@ jobs:
       - name: Run PlatformIO Build
         run: |
           TARGET_DIR=$(find extracted_project -name "platformio.ini" -exec dirname {} \;)
-          echo "Found project dir at: $TARGET_DIR"
           cd "$TARGET_DIR"
-          pio run
+          # تجميع البيئة المخصصة لـ wifi / esp32s3 مباشرة
+          pio run -e wifi --silent || pio run --silent
 
       - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
