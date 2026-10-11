@@ -12,9 +12,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Show files in repository
+        run: ls -la
+
       - name: Unzip project files
         run: |
-          unzip FluidNC-4.1.0-ESP32S3-Custom.zip -d extracted_project
+          unzip -q FluidNC-4.1.0-ESP32S3-Custom.zip -d extracted_project
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,7 +29,8 @@ jobs:
 
       - name: Run PlatformIO Build for ESP32-S3
         run: |
-          TARGET_DIR=$(find extracted_project -name "platformio.ini" -exec dirname {} \;)
+          TARGET_DIR=$(find extracted_project -name "platformio.ini" -exec dirname {} \; | head -n 1)
+          echo "Found target dir: $TARGET_DIR"
           cd "$TARGET_DIR"
           echo "=== بدء تجميع بيئة ESP32-S3 فقط ==="
           pio run -e esp32s3
@@ -35,5 +39,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: firmware-binaries
-          path: 'extracted_project/**/.pio/build/**/*.bin'
+          path: '**/ .pio/build/**/*.bin'
           
