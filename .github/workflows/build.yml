@@ -12,12 +12,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show files in repository
-        run: ls -la
+      - name: Install Unzip and Check Files
+        run: |
+          sudo apt-get update && sudo apt-get install -y unzip
+          ls -la
 
       - name: Unzip project files
         run: |
-          unzip -q FluidNC-4.1.0-ESP32S3-Custom.zip -d extracted_project
+          unzip -o FluidNC-4.1.0-ESP32S3-Custom.zip -d extracted_project
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,8 +34,8 @@ jobs:
           TARGET_DIR=$(find extracted_project -name "platformio.ini" -exec dirname {} \; | head -n 1)
           echo "Found target dir: $TARGET_DIR"
           cd "$TARGET_DIR"
-          echo "=== بدء تجميع بيئة ESP32-S3 فقط ==="
-          pio run -e esp32s3
+          echo "=== بدء تجميع بيئة wifi_s3 ==="
+          pio run -e wifi_s3
 
       - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
