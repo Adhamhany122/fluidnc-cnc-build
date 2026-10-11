@@ -34,10 +34,11 @@ jobs:
           cd "$TARGET_DIR"
           echo "=== بدء تجميع بيئة wifi_s3 ==="
           pio run -e wifi_s3
-
+    
       - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
         with:
           name: firmware-binaries
-          path: extracted_project/**/.pio/build/wifi_s3/*.bin
-          
+          path: |
+            **/*.bin
+            
